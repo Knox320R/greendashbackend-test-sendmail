@@ -31,7 +31,6 @@
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.6.5",
     "node-cron": "^3.0.3",
-    "nodemailer": "^6.9.7",
     "sequelize": "^6.35.0",
     "uuid": "^9.0.1",
     "web3": "^4.2.2"

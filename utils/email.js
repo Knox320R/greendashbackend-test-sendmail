@@ -1,14 +1,16 @@
-const nodemailer = require('nodemailer');
 require('dotenv').config();
+const sgMail = require('@sendgrid/mail');
 
-// Send verification email
 const sendVerificationEmail = async (email, token, referralLink) => {
   try {
-    const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:8080'}/verify-email?token=${token}`;
-    
-    const mailOptions = {
-      from: process.env.SENDGRID_FROM_EMAIL,
+    console.log("token ==========", token, email);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    const verificationUrl = `${process.env.FRONTEND_URL || 'https://vortex-frontend.web.app'}/verify-email?token=${token}`;
+
+    const msg = {
       to: email,
+      from: process.env.SENDGRID_FROM_EMAIL, // Must be verified in SendGrid
       subject: 'Verify Your Email - GreenDash',
       html: `
         <h2>Welcome to GreenDash!</h2>
@@ -21,27 +23,17 @@ const sendVerificationEmail = async (email, token, referralLink) => {
       `
     };
 
-    if (process.env.NODE_ENV === 'development' && !process.env.SENDGRID_API_KEY && !process.env.SMTP_HOST) {
+    if (process.env.NODE_ENV === 'development' && !process.env.SENDGRID_API_KEY) {
       console.log(`[MOCK EMAIL] Verification email to ${email}: ${verificationUrl}`);
-      return Promise.resolve();
+      return;
     }
-
-    console.log(email, process.env.SENDGRID_API_KEY, process.env.SENDGRID_FROM_EMAIL);
-    const transporter = nodemailer.createTransport({
-      service: 'SendGrid',
-      auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY
-      }
-    });
-    console.log(transporter);
-    const result = await transporter.sendMail(mailOptions);
-    console.log(`Verification email sent to ${email}:`, result.messageId);
+    console.log("ppqwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+    const result = await sgMail.send(msg);
+    console.log(`Verification email sent to ${email}`);
     return result;
   } catch (error) {
-    console.error('Error sending verification email:', error);
-    // Don't throw error to prevent registration failure
-    return Promise.resolve();
+    console.error('Error sending verification email:', error.response?.body || error.message);
+    return Promise.resolve(); // Avoid blocking user registration
   }
 };
 
