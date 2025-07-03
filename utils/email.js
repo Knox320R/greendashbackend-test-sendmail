@@ -4,24 +4,12 @@ const nodemailer = require('nodemailer');
 const createTransporter = () => {
   // Use SendGrid if API key is provided
   if (process.env.SENDGRID_API_KEY) {
+    console.log("ssssssssssssssssssssssssssssssssss");
     return nodemailer.createTransport({
       service: 'SendGrid',
       auth: {
         user: 'apikey',
         pass: process.env.SENDGRID_API_KEY
-      }
-    });
-  }
-
-  // Use SMTP if configured
-  if (process.env.SMTP_HOST) {
-    return nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT || 587,
-      secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS
       }
     });
   }
@@ -45,8 +33,6 @@ const sendVerificationEmail = async (email, token, referralLink) => {
   try {
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:8080'}/verify-email?token=${token}`;
     
-    console.log(process.env.SMTP_FROM, email, process.env.SENDGRID_FROM_EMAIL, process.env.SENDGRID_FROM_EMAIL);
-
     const mailOptions = {
       from: process.env.SENDGRID_FROM_EMAIL,
       to: email,
@@ -67,6 +53,7 @@ const sendVerificationEmail = async (email, token, referralLink) => {
       return Promise.resolve();
     }
 
+    console.log(email, process.env.SENDGRID_API_KEY, process.env.SENDGRID_FROM_EMAIL);
     const result = await transporter.sendMail(mailOptions);
     console.log(`Verification email sent to ${email}:`, result.messageId);
     return result;
