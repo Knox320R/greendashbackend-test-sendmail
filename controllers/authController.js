@@ -26,7 +26,6 @@ const register = async (req, res) => {
         message: 'User with this email already exists'
       });
     }
-    console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     // Validate referral code if provided
     let referrer = null;
     if (referral_code) {
@@ -39,8 +38,6 @@ const register = async (req, res) => {
       }
     }
     const new_referral_code = User.generateReferralCode()
-    console.log(req.body);
-    console.log(new_referral_code, "new_referral_codessssssssssssssssss");
     // Create user
     const user = await User.create({
       email,
@@ -72,7 +69,6 @@ const register = async (req, res) => {
       email_verification_expires: verificationExpires
     });
 
-    console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
     // Send verification email
     await sendVerificationEmail(user.email, verificationToken, 'user.getReferralLink()');
     console.log("ppppppppppppppppppppppppppppp");
