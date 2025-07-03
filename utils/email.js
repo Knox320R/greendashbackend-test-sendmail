@@ -1,33 +1,6 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-// Create transporter for email sending
-const createTransporter = () => {
-  // Use SendGrid if API key is provided
-  if (process.env.SENDGRID_API_KEY) {
-    console.log("ssssssssssssssssssssssssssssssssss");
-    return nodemailer.createTransport({
-      service: 'SendGrid',
-      auth: {
-        user: 'apikey',
-        pass: process.env.SENDGRID_API_KEY
-      }
-    });
-  }
-
-  // Fallback to mock transporter for development
-  return nodemailer.createTransporter({
-    host: 'localhost',
-    port: 1025,
-    secure: false,
-    auth: {
-      user: 'test',
-      pass: 'test'
-    }
-  });
-};
-
-
 // Send verification email
 const sendVerificationEmail = async (email, token, referralLink) => {
   try {
@@ -54,7 +27,13 @@ const sendVerificationEmail = async (email, token, referralLink) => {
     }
 
     console.log(email, process.env.SENDGRID_API_KEY, process.env.SENDGRID_FROM_EMAIL);
-    const transporter = createTransporter();
+    const transporter = nodemailer.createTransport({
+      service: 'SendGrid',
+      auth: {
+        user: 'apikey',
+        pass: process.env.SENDGRID_API_KEY
+      }
+    });
     console.log(transporter);
     const result = await transporter.sendMail(mailOptions);
     console.log(`Verification email sent to ${email}:`, result.messageId);
