@@ -39,6 +39,7 @@ const register = async (req, res) => {
       }
     }
     const new_referral_code = User.generateReferralCode()
+    console.log(new_referral_code, "new_referral_codessssssssssssssssss");
     // Create user
     const user = await User.create({
       email,
