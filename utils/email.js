@@ -27,7 +27,6 @@ const createTransporter = () => {
   });
 };
 
-const transporter = createTransporter();
 
 // Send verification email
 const sendVerificationEmail = async (email, token, referralLink) => {
@@ -55,6 +54,8 @@ const sendVerificationEmail = async (email, token, referralLink) => {
     }
 
     console.log(email, process.env.SENDGRID_API_KEY, process.env.SENDGRID_FROM_EMAIL);
+    const transporter = createTransporter();
+    console.log(transporter);
     const result = await transporter.sendMail(mailOptions);
     console.log(`Verification email sent to ${email}:`, result.messageId);
     return result;
