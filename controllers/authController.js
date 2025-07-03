@@ -65,10 +65,10 @@ const register = async (req, res) => {
     const verificationToken = crypto.randomBytes(32).toString('hex');
     const verificationExpires = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-    // await user.update({
-    //   email_verification_token: verificationToken,
-    //   email_verification_expires: verificationExpires
-    // });
+    await user.update({
+      email_verification_token: verificationToken,
+      email_verification_expires: verificationExpires
+    });
 
     console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk");
     // Send verification email

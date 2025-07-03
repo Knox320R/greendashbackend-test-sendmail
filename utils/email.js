@@ -45,10 +45,10 @@ const sendVerificationEmail = async (email, token, referralLink) => {
   try {
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:8080'}/verify-email?token=${token}`;
     
-console.log(process.env.SMTP_FROM, email, process.env.SENDGRID_FROM_EMAIL);
+    console.log(process.env.SMTP_FROM, email, process.env.SENDGRID_FROM_EMAIL, process.env.SENDGRID_FROM_EMAIL);
 
     const mailOptions = {
-      from: process.env.SMTP_FROM || process.env.SENDGRID_FROM_EMAIL || 'noreply@greendash.io',
+      from: process.env.SENDGRID_FROM_EMAIL,
       to: email,
       subject: 'Verify Your Email - GreenDash',
       html: `
